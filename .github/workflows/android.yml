@@ -31,9 +31,16 @@ jobs:
 
     - name: Run Unit Tests
       run: ./gradlew testDebugUnitTest
+    - name: Create Custom Path and Move APK
+      # This finds any .apk file in the project and moves it to a new 'my_outputs' folder
+      run: |
+        mkdir -p my_outputs
+        find . -name "*.apk" -type f -exec mv {} my_outputs/ \;
+        echo "Contents of my_outputs:"
+        ls my_outputs
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: app-debug
-        path: app/build/outputs/apk/debug/*.
+        name: android-debug-apk
+        path: my_outputs/
